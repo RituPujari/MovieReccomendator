@@ -1,5 +1,3 @@
-# Build a recommendation engine that recommends movies to users.
-# Item Based Collaborative Filter recommendation system
 library(recommenderlab)
 library(ggplot2)                       
 library(data.table)
