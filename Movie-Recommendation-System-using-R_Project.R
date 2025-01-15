@@ -2,7 +2,7 @@ library(recommenderlab)
 library(ggplot2)                       
 library(data.table)
 library(reshape2)
-# Retrieve and display data
+# Retrieve and display the data
 setwd("/Users/arpitabhattacharya/Desktop/Warwick /Internship/Github uploads/Movie recommendation - R/IMDB-Dataset")
 movie_data <- read.csv("movies.csv",stringsAsFactors=FALSE)
 rating_data <- read.csv("ratings.csv")
@@ -13,7 +13,7 @@ head(movie_data)
 summary(rating_data)
 head(rating_data)
 # Data pre-processing
-# Creating a one-hot encoding to create a matrix that comprises of corresponding genres for each of the films.
+# Creating an encoding to create a matrix that comprises of corresponding genres for each of the films.
 movie_genre <- as.data.frame(movie_data$genres, stringsAsFactors=FALSE)
 library(data.table)
 movie_genre2 <- as.data.frame(tstrsplit(movie_genre[,1], '[|]', 
@@ -50,7 +50,7 @@ ratingMatrix
 recommendation_model <- recommenderRegistry$get_entries(dataType = "realRatingMatrix")
 names(recommendation_model)
 lapply(recommendation_model, "[[", "description")
-# Implementing a single model in the R project – Item Based Collaborative Filtering
+# Implementing a single model- Item Based Collaborative Filtering
 recommendation_model$IBCF_realRatingMatrix$parameters
 # Collaborative Filtering involves suggesting movies to the users that are based on collecting preferences from many other users.
 # With the help of recommenderlab, we can compute similarities between users
@@ -59,7 +59,7 @@ similarity_mat <- similarity(ratingMatrix[1:4, ],
                              which = "users")
 as.matrix(similarity_mat)
 image(as.matrix(similarity_mat), main = "User's Similarities")
-# Portray the similarity that is shared between the films
+# Portraying the similarity that is shared between the films
 movie_similarity <- similarity(ratingMatrix[, 1:4], method =
                                  "cosine", which = "items")
 as.matrix(movie_similarity)
@@ -81,14 +81,13 @@ for (index in 1:10325){
                                               movie_data$movieId == table_views[index,1])$title)
 }
 table_views[1:6,]
-# Visualize a bar plot for the total number of views of the top films
+# Visualizing a bar plot for the total number of views of the top films
 ggplot(table_views[1:6, ], aes(x = title, y = views)) +
   geom_bar(stat="identity", fill = 'steelblue') +
   geom_text(aes(label=views), vjust=-0.3, size=3.5) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   ggtitle("Total Views of the Top Films")
 # Heatmap of Movie Ratings
-# Visualize a heatmap of the movie ratings
 image(ratingMatrix[1:20, 1:25], axes = FALSE, main = "Heatmap of the first 25 rows and 25 columns")
 # Data Preparation
 movie_ratings <- ratingMatrix[rowCounts(ratingMatrix) > 50,
@@ -100,7 +99,7 @@ minimum_users <- quantile(colCounts(movie_ratings), 0.98)
 image(movie_ratings[rowCounts(movie_ratings) > minimum_movies,
                     colCounts(movie_ratings) > minimum_users],
       main = "Heatmap of the top users and movies")
-# Visualizing the distribution of the average ratings per user
+# distribution of the average ratings per user
 average_ratings <- rowMeans(movie_ratings)
 qplot(average_ratings, fill=I("steelblue"), col=I("red")) +
   ggtitle("Distribution of the average rating per user")
@@ -141,7 +140,7 @@ dim(model_info$sim)
 top_items <- 20
 image(model_info$sim[1:top_items, 1:top_items],
       main = "Heatmap of the first rows and columns")
-# Visualize sum of rows and columns with the similarity of the objects above 0
+#  sum of rows and columns with the similarity of the objects above 0
 sum_rows <- rowSums(model_info$sim > 0)
 table(sum_rows)
 sum_cols <- colSums(model_info$sim > 0)
